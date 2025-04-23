@@ -1,12 +1,15 @@
 package com.codecraft.java.services;
 
 import com.codecraft.java.Repositories.UserRepository;
+import com.codecraft.java.components.DefaultProperties;
 import com.codecraft.java.components.UserRequestHandler;
 import com.codecraft.java.components.UserResponseHandler;
 import com.codecraft.java.entities.User;
 import com.codecraft.java.models.UserRequest;
 import com.codecraft.java.models.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +28,15 @@ public class UserServices {
     @Autowired
     private UserRequestHandler userRequestHandler;
 
+    @Autowired
+    private DefaultProperties properties;
+
+    @Value("${app.default.initial-delay}")
+    private Integer delay;
+
+    @Autowired
+    private Environment env;
+
     public UserResponse createUser(UserRequest request) throws Error{
         List<String> errors = userRequestHandler.validateRequest(request);
         if (!errors.isEmpty()) {
@@ -38,6 +50,11 @@ public class UserServices {
     }
 
     public List<UserResponse> getAllUsers() {
+        System.out.println(properties.toString());
+        System.out.println(delay);
+        System.out.println(env.getProperty("app.default.default-username"));
+        System.out.println(env.getProperty("spring.datasource.url"));
+
         List<User> users = userRepository.findAll();
         return users.stream().map(user -> userResponseHandler.createResponse(user)).collect(Collectors.toList());
     }

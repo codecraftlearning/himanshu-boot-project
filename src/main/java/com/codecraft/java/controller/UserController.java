@@ -13,7 +13,6 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-
     @Autowired
     private UserServices userService;
 
@@ -26,7 +25,6 @@ public class UserController {
     public List<UserResponse> getAllUsers() {
         return userService.getAllUsers();
     }
-
 
     @GetMapping (path = "/{id}")
     public  UserResponse getUser(@PathVariable(name = "id") Integer id) throws Error {
